@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Case Estrategista Digital | Programa Brain · Randoncorp (8 Slides)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --canvas: #e2e8f0;
+      --slide-bg: #ffffff;
+      --ink: #0f172a;
+      --muted: #475569;
+      --subtle: #64748b;
+      --line: #e2e8f0;
+      --primary: #0369a1;
+      --primary-light: #e0f2fe;
+      --primary-soft: #f0f9ff;
+      --emerald: #047857;
+      --emerald-soft: #ecfdf5;
+      --amber: #b45309;
+      --amber-soft: #fffbeb;
+      --navy: #0c192c;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--canvas);
+      color: var(--ink);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Control Bar (hidden on print) */
+    .deck-controls {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--navy);
+      color: #fff;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .deck-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .deck-tag {
+      background: rgba(56, 189, 248, 0.2);
+      color: #7dd3fc;
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+    }
+
+    .deck-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      padding: 0.45rem 0.9rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .ctrl-btn:hover { background: rgba(255, 255, 255, 0.22); }
+    .ctrl-btn.active { background: #0284c7; border-color: #38bdf8; }
+
+    .slide-counter {
+      font-family: var(--mono);
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 0 0.5rem;
+      color: #bae6fd;
+    }
+
+    /* Stage Container */
+    .stage {
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 1.75rem auto 3rem;
+      padding: 0 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.25rem;
+    }
+
+    /* Slide Card (16:9 proportion on desktop, generous breathing room) */
+    .slide {
+      background: var(--slide-bg);
+      border-radius: 18px;
+      padding: 2.8rem 3.4rem 2.4rem;
+      min-height: 670px;
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+      border: 1px solid #cbd5e1;
+      position: relative;
+    }
+
+    .slide.active,
+    body.all-slides-mode .slide {
+      display: flex;
+    }
+
+    /* Slide Header */
+    .slide-header {
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 1.15rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .slide-top-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.45rem;
+    }
+
+    .slide-kicker {
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--primary);
+    }
+
+    .slide-num-pill {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--subtle);
+      background: #f1f5f9;
+      padding: 0.2rem 0.65rem;
+      border-radius: 99px;
+    }
+
+    .slide-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -0.025em;
+      line-height: 1.2;
+    }
+
+    .slide-takeaway {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin-top: 0.45rem;
+      font-weight: 500;
+    }
+
+    /* Slide Body */
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 1.4rem;
+    }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.35rem; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.15rem; }
+
+    .box {
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 1.4rem 1.5rem;
+    }
+
+    .box-primary {
+      background: var(--primary-soft);
+      border-color: #bae6fd;
+    }
+
+    .box-emerald {
+      background: var(--emerald-soft);
+      border-color: #a7f3d0;
+    }
+
+    .box-amber {
+      background: var(--amber-soft);
+      border-color: #fde68a;
+    }
+
+    .box h3 {
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .box p {
+      font-size: 0.98rem;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .bullet-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+    }
+
+    .bullet-list li {
+      font-size: 0.98rem;
+      color: var(--muted);
+      line-height: 1.5;
+      padding-left: 1.15rem;
+      position: relative;
+    }
+
+    .bullet-list li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .bullet-list strong { color: var(--ink); }
+
+    /* Clean Tables for Matrix / Roadmap */
+    .exec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.95rem;
+    }
+
+    .exec-table th {
+      text-align: left;
+      background: #f1f5f9;
+      color: var(--ink);
+      font-weight: 700;
+      padding: 0.85rem 1rem;
+      border-bottom: 2px solid #cbd5e1;
+      font-size: 0.88rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .exec-table td {
+      padding: 0.95rem 1rem;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+      vertical-align: top;
+      line-height: 1.45;
+    }
+
+    .exec-table td strong { color: var(--ink); }
+
+    /* KPI Big Numbers */
+    .kpi-number {
+      font-family: var(--mono);
+      font-size: 1.95rem;
+      font-weight: 700;
+      color: var(--primary);
+      line-height: 1.1;
+      margin-bottom: 0.35rem;
+    }
+
+    .kpi-number.green { color: var(--emerald); }
+
+    /* Slide Footer */
+    .slide-footer {
+      border-top: 1px solid var(--line);
+      padding-top: 0.9rem;
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.82rem;
+      color: var(--subtle);
+    }
+
+    /* Speaker Notes Drawer */
+    .speaker-note {
+      display: none;
+      margin-top: 1.25rem;
+      padding: 1.15rem 1.4rem;
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 12px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      border-left: 4px solid #38bdf8;
+    }
+
+    body.show-notes .speaker-note { display: block; }
+    .speaker-note strong { color: #7dd3fc; }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .slide { padding: 1.75rem 1.4rem; min-height: auto; }
+      .slide-title { font-size: 1.45rem; }
+      .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+      .exec-table { display: block; overflow-x: auto; }
+    }
+
+    /* Print to 16:9 PDF */
+    @media print {
+      @page { size: landscape; margin: 10mm; }
+      body { background: #fff; }
+      .deck-controls, .speaker-note { display: none !important; }
+      .stage { margin: 0; padding: 0; max-width: none; gap: 0; }
+      .slide {
+        display: flex !important;
+        box-shadow: none;
+        border: none;
+        min-height: 180mm;
+        page-break-after: always;
+        padding: 12mm 14mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Top Navigation Controls -->
+<header class="deck-controls">
+  <div class="deck-brand">
+    <span class="deck-tag">CASE FASE 3 · 02/12</span>
+    <span>Plano 12 Meses · Programa Brain (Randoncorp) — Jefferson Motta</span>
+  </div>
+
+  <div class="deck-actions">
+    <button class="ctrl-btn" onclick="prevSlide()">← Anterior</button>
+    <span class="slide-counter" id="slideCounter">1 / 8</span>
+    <button class="ctrl-btn" onclick="nextSlide()">Próximo →</button>
+    <button class="ctrl-btn" id="notesBtn" onclick="toggleNotes()">🎙️ Notas de Fala</button>
+    <button class="ctrl-btn" id="viewAllBtn" onclick="toggleAllSlides()">📄 Ver Todos (8)</button>
+    <button class="ctrl-btn" onclick="window.print()">🖨️ Salvar PDF</button>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- ==================== SLIDE 1 ==================== -->
+  <section class="slide active" data-slide="1">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">1 · Leitura do Cenário &amp; Hipóteses Adotadas</span>
+          <span class="slide-num-pill">Slide 01 / 08</span>
+        </div>
+        <h1 class="slide-title">O 2º Ciclo do Programa Brain: Da Governança Inicial para a Escala Coordenada</h1>
+        <p class="slide-takeaway">A Randoncorp já superou a fase de experimentação dispersa; o desafio agora é converter maturidade digital em retorno mensurável respeitando a identidade de cada negócio.</p>
+      </header>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <h3>🔍 Leitura do Momento Atual (Ponto de Partida)</h3>
+            <ul class="bullet-list">
+              <li><strong>1º Ciclo Consolidado:</strong> Governança instituída, Comitê Brain ativo, stack Microsoft (Copilot) definida e tração inicial em operações industriais.</li>
+              <li><strong>Virada do 2º Ciclo:</strong> Escalar soluções industriais (Manutenção, Qualidade, PCP) e <strong>embarcar áreas corporativas e serviços</strong> (Rands, CSC, Jurídico, RH, Financeiro).</li>
+              <li><strong>Assimetria Natural:</strong> Empresas com maturidades de dados, sistemas legados (SAP/ERPs) e dinâmicas operacionais distintas.</li>
+            </ul>
+          </div>
+
+          <div class="box box-primary">
+            <h3>🧭 4 Hipóteses que Orientam Este Plano</h3>
+            <ul class="bullet-list">
+              <li><strong>1. Processo precede Tecnologia:</strong> "Agentificar" um fluxo confuso sobre o ERP apenas acelera o retrabalho.</li>
+              <li><strong>2. Assimetria exige Clusterização:</strong> Um plano único trava os avançados e frustra os iniciantes; o desdobramento deve ser por nível de prontidão.</li>
+              <li><strong>3. Evolução Incremental (Cultura):</strong> Em processos tradicionais, confiança se conquista com operação assistida (<em>Human-in-the-Loop</em>) antes da automação total.</li>
+              <li><strong>4. Execução Agnóstica com Filtro Forte:</strong> O Estrategista qualifica o Business Case; o melhor parceiro (interno, IHR ou startup) executa.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (2,5 min):</strong> "Leandro, minha leitura central é que o 1º Ciclo do Brain cumpriu o papel crucial de organizar a casa: colocou governança, stack padrão com Copilot e primeiros projetos fabris. No 2º Ciclo, o desafio muda: precisamos escalar os ganhos na indústria e, ao mesmo tempo, embarcar o mundo corporativo e financeiro (Rands, CSC, Jurídico, RH). Para isso, parto de 4 hipóteses práticas: processo vem antes do código; unidades diferentes pedem abordagens por cluster; em uma cultura tradicional em processos, o ótimo não pode ser inimigo do bom; e o papel do Estrategista é garantir que só entre para execução técnica o que tem Business Case sólido e dono de negócio engajado."
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Jornada de Inteligência Artificial Randoncorp</span>
+      <span>Tecnologia · Processos · Pessoas · Governança</span>
+    </footer>
+  </section>
+
+  <!-- ==================== SLIDE 2 ==================== -->
+  <section class="slide" data-slide="2">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">2 · Diagnóstico &amp; Baseline Comparável</span>
+          <span class="slide-num-pill">Slide 02 / 08</span>
+        </div>
+        <h1 class="slide-title">Scorecard Brain 4D: Uma Régua Única para Negócios Distintos</h1>
+        <p class="slide-takeaway">Assessment executivo nos primeiros 45 dias avalia as 4 dimensões (Nível 1 a 4) e posiciona cada unidade em 3 Clusters de Prontidão.</p>
+      </header>
+
+      <div class="slide-body">
+        <table class="exec-table">
+          <thead>
+            <tr>
+              <th>Dimensão</th>
+              <th>O Que Avaliamos no Baseline (Nível 1: Ad-hoc → Nível 4: Escalado)</th>
+              <th>Evidência Prática (Gate)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Tecnologia &amp; Dados</strong></td>
+              <td>Disponibilidade e qualidade dos dados, acesso via APIs/SAP/MES e aderência à stack homologada.</td>
+              <td>Índice de prontidão das bases</td>
+            </tr>
+            <tr>
+              <td><strong>2. Processos</strong></td>
+              <td>Padronização do fluxo, estabilidade operacional, volume repetitivo e clareza dos gargalos de SLA/custo.</td>
+              <td>Processo mapeado (Blueprint)</td>
+            </tr>
+            <tr>
+              <td><strong>3. Pessoas</strong></td>
+              <td>Nível de letramento digital da equipe, presença de <em>Key Users</em> e patrocínio ativo da liderança local.</td>
+              <td>Sponsor + Multiplicador nomeado</td>
+            </tr>
+            <tr>
+              <td><strong>4. Governança</strong></td>
+              <td>Clareza de indicadores de negócio (baseline financeiro/operacional) e conformidade com segurança/LGPD.</td>
+              <td>KPI de origem auditável</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-3">
+          <div class="box">
+            <h3>🌱 Cluster A · Fundação</h3>
+            <p><strong>Perfil:</strong> Dados dispersos ou processos não padronizados.<br><strong>Prescrição:</strong> Organização de processo, higienização de base e <em>Digital Upskilling</em> (sem IA complexa imediata).</p>
+          </div>
+          <div class="box box-primary">
+            <h3>⚡ Cluster B · Aceleração Corporativa</h3>
+            <p><strong>Perfil:</strong> Alta carga transacional sobre ERP/SAP (ex: <strong>Rands, CSC, Jurídico, RH</strong>).<br><strong>Prescrição:</strong> <em>Quick Wins</em> de agentificação, triagem documental e Copilot.</p>
+          </div>
+          <div class="box box-emerald">
+            <h3>🏭 Cluster C · Escala Industrial</h3>
+            <p><strong>Perfil:</strong> Massa crítica de dados operacionais (ex: <strong>Castertech, Suspensys, Fras-le</strong>).<br><strong>Prescrição:</strong> Plataformas preditivas de Manutenção, Qualidade e PCP.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (2,5 min):</strong> "Como comparar uma fundição como a Castertech com uma operação financeira como a Rands ou o CSC? Nos primeiros 45 dias, aplicamos o Scorecard Brain 4D. Não é um diagnóstico teórico longo: avaliamos dados, estabilidade do processo, prontidão das pessoas e métricas atuais. Com essa nota de 1 a 4, classificamos cada área em 3 clusters: Cluster Fundação (onde primeiro arrumamos processo e letramento), Cluster Aceleração Corporativa (ideal para agentificação rápida sobre SAP e esteira de crédito) e Cluster Escala Industrial (pronto para plataformas preditivas)."
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Diagnóstico Executivo em 45 Dias</span>
+      <span>Baseline Comparável Inter-Empresas</span>
+    </footer>
+  </section>
+
+  <!-- ==================== SLIDE 3 ==================== -->
+  <section class="slide" data-slide="3">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">3 · Ambição de Maturidade Digital (12 Meses)</span>
+          <span class="slide-num-pill">Slide 03 / 08</span>
+        </div>
+        <h1 class="slide-title">A Transformação em 12 Meses: De Iniciativas Pontuais a Capacidades Permanentes</h1>
+        <p class="slide-takeaway">Meta de elevar a maturidade média das unidades-alvo em +1,0 nível no Scorecard 4D, consolidando ativos reutilizáveis entre as empresas.</p>
+      </header>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box">
+            <h3>📍 Onde Estamos (Fim do 1º Ciclo)</h3>
+            <ul class="bullet-list">
+              <li><strong>Tecnologia:</strong> Stack Microsoft definida, mas integrações com legados (SAP/ERPs) ainda tratadas caso a caso.</li>
+              <li><strong>Processos:</strong> Automação focada em tarefas isoladas; áreas corporativas entrando agora no radar estruturado.</li>
+              <li><strong>Pessoas:</strong> Uso individual de IA generativa por entusiastas; dependência alta do time central para identificar oportunidades.</li>
+              <li><strong>Governança:</strong> Comitê estruturado, mas necessidade de padronizar o cálculo de ROI e o reuso entre subsidiárias.</li>
+            </ul>
+          </div>
+
+          <div class="box box-emerald">
+            <h3>🎯 Onde Chegaremos (Mês 12 do 2º Ciclo)</h3>
+            <ul class="bullet-list">
+              <li><strong>Tecnologia:</strong> Catálogo de conectores e agentes homologados operando sobre SAP/legados com segurança corporativa.</li>
+              <li><strong>Processos:</strong> Esteiras críticas (Manutenção Industrial, PCP, Crédito Rands e CSC) operando com recomendação assistida por IA.</li>
+              <li><strong>Pessoas:</strong> Rede de <strong>Brain Champions</strong> ativa nas unidades + lideranças capacitadas pela Academia Digital (<em>Upskilling 2026</em>).</li>
+              <li><strong>Governança:</strong> 100% do portfólio regido por Business Cases auditados e pelo menos 30% das soluções replicadas em +1 empresa.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (2,5 min):</strong> "Qual é a nossa ambição concreta para daqui a 12 meses? Não é apenas entregar projetos avulsos, mas deixar capacidades permanentes instaladas nas 4 dimensões. Em tecnologia, criar conectores reutilizáveis com SAP e sistemas legados; em processos, ter tanto o chão de fábrica quanto áreas corporativas operando com agentes assistidos; em pessoas, descentralizar a cultura através dos Brain Champions e da Academia Digital; e em governança, garantir que soluções criadas para uma empresa do grupo sejam replicadas para as demais com custo marginal menor."
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Visão de Chegada 12 Meses</span>
+      <span>Evolução Sistêmica nas 4 Dimensões</span>
+    </footer>
+  </section>
+
+  <!-- ==================== SLIDE 4 ==================== -->
+  <section class="slide" data-slide="4">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">4 · Critérios de Priorização &amp; Portfólio Inicial</span>
+          <span class="slide-num-pill">Slide 04 / 08</span>
+        </div>
+        <h1 class="slide-title">Escolhas Claras: Matriz de Priorização &amp; Regra de Portfólio 50 / 30 / 20</h1>
+        <p class="slide-takeaway">Equilíbrio entre vitórias rápidas que financiam a credibilidade do programa e plataformas estruturantes de longo prazo.</p>
+      </header>
+
+      <div class="slide-body">
+        <div class="box" style="padding: 1.05rem 1.4rem;">
+          <h3>⚖️ Filtro Eliminatório de Entrada no Funil (Score de Priorização)</h3>
+          <p><strong>Eixo 1 — Valor de Negócio (50%):</strong> Potencial de Save financeiro, ganho de SLA/produtividade, redução de risco e potencial de replicação no grupo.<br>
+          <strong>Eixo 2 — Viabilidade &amp; Prontidão (50%):</strong> Qualidade/disponibilidade do dado no legado, esforço de integração, patrocinador executivo e capacidade de absorção da área.</p>
+        </div>
+
+        <div class="grid-3">
+          <div class="box box-primary">
+            <h3>⚡ 50% Quick Wins (30–90 dias)</h3>
+            <ul class="bullet-list">
+              <li><strong>Rands (Banco Randon):</strong> Desgargalamento e triagem inteligente na esteira de propostas de crédito.</li>
+              <li><strong>CSC / Jurídico / RH:</strong> Agentificação de triagem documental, contratos e atendimento interno sobre SAP/M365.</li>
+              <li><strong>Produtividade:</strong> Casos aplicados de Microsoft Copilot em áreas administrativas.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h3>🧱 30% Capacidades Estruturantes</h3>
+            <ul class="bullet-list">
+              <li><strong>Integração Legado:</strong> Camada padrão de conectores seguros para SAP e ERPs das unidades.</li>
+              <li><strong>Governança de Dados:</strong> Padronização de bases operacionais para alimentar modelos preditivos.</li>
+              <li><strong>Academia Digital:</strong> Trilhas <em>Digital Upskilling 2026</em> e playbook de Discovery/Business Case.</li>
+            </ul>
+          </div>
+
+          <div class="box box-emerald">
+            <h3>🏭 20% Projetos Estratégicos (6–12m)</h3>
+            <ul class="bullet-list">
+              <li><strong>Manutenção Preditiva:</strong> Plataforma de Inteligência de Manutenção iniciando na <strong>Castertech</strong> como arquitetura-mãe para as demais fábricas.</li>
+              <li><strong>Operações &amp; PCP:</strong> Inteligência preditiva de qualidade e alocação ótima de produção entre plantas.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (3,0 min):</strong> "Um bom plano estratégico se define pelo que ele escolhe priorizar e pelo que ele recusa. Toda demanda passa por dois eixos: Valor de Negócio e Prontidão de Execução. Se não há dado confiável ou dono do negócio, não entra como projeto de IA — entra primeiro como preparação. Para o portfólio de 12 meses, aplicamos a regra 50/30/20: 50% do esforço em Quick Wins de 30 a 90 dias nas áreas corporativas e Rands para gerar resultado rápido; 30% em capacidades estruturantes de dados, conectores SAP e letramento; e 20% nos projetos industriais transformacionais, como a Plataforma de Inteligência de Manutenção começando pela Castertech já desenhada para escalar nas outras unidades."
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Gestão de Portfólio Orientada a Valor</span>
+      <span>Alocação Balanceada 50% / 30% / 20%</span>
+    </footer>
+  </section>
+
+  <!-- ==================== SLIDE 5 ==================== -->
+  <section class="slide" data-slide="5">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">5 · Roadmap Trimestral (12 Meses) &amp; Lógica de Evolução</span>
+          <span class="slide-num-pill">Slide 05 / 08</span>
+        </div>
+        <h1 class="slide-title">Desdobramento Trimestral: Da Linha de Base à Escala Multi-Empresas</h1>
+        <p class="slide-takeaway">Cada iniciativa percorre o ciclo disciplinado: Diagnóstico → Discovery → Enquadramento (Business Case) → MVP → Operação Assistida → Escala.</p>
+      </header>
+
+      <div class="slide-body">
+        <div class="grid-4">
+          <div class="box">
+            <h3>Q1 · Mês 1 a 3<br><span style="color:var(--primary);font-size:0.88rem;">Baseline &amp; Ignição</span></h3>
+            <ul class="bullet-list">
+              <li>Aplicação do <strong>Scorecard 4D</strong> nas unidades.</li>
+              <li>Workshops de <strong>Discovery</strong> com executivos.</li>
+              <li>Aprovação dos primeiros <strong>Business Cases</strong>.</li>
+              <li>Kick-off da Onda 1 de <em>Quick Wins</em> (Rands/CSC) e desenho do MVP Castertech.</li>
+            </ul>
+          </div>
+
+          <div class="box box-primary">
+            <h3>Q2 · Mês 4 a 6<br><span style="color:var(--primary);font-size:0.88rem;">MVPs &amp; Op. Assistida</span></h3>
+            <ul class="bullet-list">
+              <li>Go-Live da Onda 1 em <strong>Operação Assistida</strong> (60 dias com medição de uso).</li>
+              <li>MVP da <strong>Plataforma de Manutenção (Castertech)</strong> em teste assistido.</li>
+              <li>Formação da 1ª turma de <strong>Brain Champions</strong> e trilhas de Upskilling.</li>
+            </ul>
+          </div>
+
+          <div class="box">
+            <h3>Q3 · Mês 7 a 9<br><span style="color:var(--primary);font-size:0.88rem;">Replicação &amp; Onda 2</span></h3>
+            <ul class="bullet-list">
+              <li><strong>Replicação cruzada:</strong> agentes validados no Q2 expandidos para novas áreas corporativas.</li>
+              <li>Evolução das unidades do Cluster Fundação para seus primeiros casos táticos.</li>
+              <li>Checkpoint semestral de ROI e maturidade.</li>
+            </ul>
+          </div>
+
+          <div class="box box-emerald">
+            <h3>Q4 · Mês 10 a 12<br><span style="color:var(--emerald);font-size:0.88rem;">Escala &amp; Auditoria</span></h3>
+            <ul class="bullet-list">
+              <li>Blueprint de expansão da Plataforma de Manutenção para a 2ª planta industrial.</li>
+              <li><strong>Auditoria de Valor</strong> junto à controladoria e negócios.</li>
+              <li>Reaplicação do Scorecard 4D (comprovação do salto anual) e plano Ano 2.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (2,5 min):</strong> "Neste roadmap trimestral, conectamos a visão estratégica ao ritmo real de entrega. No Q1 fechamos o baseline 4D, fazemos os Discoveries executivos e aprovamos a primeira safra de Business Cases. No Q2 colocamos os primeiros Quick Wins corporativos em Operação Assistida e rodamos o MVP da plataforma de manutenção na Castertech, em paralelo à formação dos Champions. No Q3 acontece o ganho de escala: pegamos os agentes que deram certo no Q2 e replicamos para outras áreas e unidades. E no Q4 auditamos o retorno financeiro acumulado, preparamos o roll-out industrial para a segunda planta e medimos o salto de maturidade no Scorecard 4D."
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Esteira: Diagnóstico → Discovery → Enquadramento → MVP → Op. Assistida → Escala</span>
+      <span>Horizonte 12 Meses (Q1–Q4)</span>
+    </footer>
+  </section>
+
+  <!-- ==================== SLIDE 6 ==================== -->
+  <section class="slide" data-slide="6">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">6 · Governança, Execução Agnóstica &amp; Digital Engagement</span>
+          <span class="slide-num-pill">Slide 06 / 08</span>
+        </div>
+        <h1 class="slide-title">Orquestração de Ponta a Ponta: Como Conectamos Negócio, Execução e Pessoas</h1>
+        <p class="slide-takeaway">O Estrategista Digital atua como ponte consultiva, evitando silos técnicos e sustentando a adoção real na ponta.</p>
+      </header>
+
+      <div class="slide-body">
+        <div class="grid-2">
+          <div class="box box-primary">
+            <h3>⚙️ 1. Governança &amp; Execução Agnóstica</h3>
+            <ul class="bullet-list">
+              <li><strong>Fronteira Clara do Estrategista:</strong> Conduz o <em>Discovery</em> com as diretorias, desenha o fluxo (<em>Service Blueprint</em>) e entrega o <strong>Business Case aprovado</strong> com dono de negócio definido.</li>
+              <li><strong>Roteamento Agnóstico de Execução:</strong> Com o case aprovado no Comitê Brain, direcionamos para o melhor veículo:
+                <br>• <em>Soluções nativas/M365:</em> Equipes internas / TI &amp; DB;
+                <br>• <em>P&amp;D e algoritmos complexos:</em> Especialistas do <strong>IHR</strong>;
+                <br>• <em>Soluções de nicho/agilidade:</em> Startups (Randon Ventures) e parceiros.</li>
+              <li><strong>Retorno na Operação Assistida:</strong> No pós-MVP, o Estrategista monitora os primeiros 60 dias para assegurar captura do ROI.</li>
+            </ul>
+          </div>
+
+          <div class="box box-emerald">
+            <h3>👥 2. Digital Engagement &amp; Gestão da Mudança</h3>
+            <ul class="bullet-list">
+              <li><strong>Camada Executiva (Sponsors):</strong> Alinhamento estratégico em comitês para destravar prioridades e cobrar adoção pelo exemplo.</li>
+              <li><strong>Rede de Brain Champions (Multiplicadores):</strong> Embaixadores locais dentro de cada fábrica e área corporativa que traduzem a linguagem técnica para a rotina do setor.</li>
+              <li><strong>Letramento em Camadas (Academia Digital):</strong> Trilhas de <em>Digital Upskilling 2026</em> combinadas com pílulas de <strong>micro-learning inseridas nos ritos já existentes</strong> das equipes.</li>
+              <li><strong>Adoção Sem Ruptura:</strong> Sistemas entram como copilotos do operador (<em>Human-in-the-Loop</em>), reduzindo resistência cultural.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (2,5 min):</strong> "Como garantimos que essa engrenagem funcione sem criar silos? Através de dois motores coordenados pelo Estrategista. O primeiro é a Governança com Execução Agnóstica: meu papel é ir às unidades, tomar o cafezinho com a liderança e com a operação, fazer o Discovery e entregar o Business Case fechado. A partir daí, conectamos o melhor executor — seja TI/DB, pesquisadores do IHR ou startups parceiras — e eu volto na Operação Assistida para medir o valor. O segundo motor é o Digital Engagement: tecnologia sem gestão da mudança não gera ROI. Trabalhamos junto à Academia Digital em três camadas: patrocínio executivo, formação de Brain Champions dentro de cada negócio e micro-learning embutido nos ritos que já existem na rotina."
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Modelo Operacional &amp; Gestão da Mudança</span>
+      <span>Orquestração · Ecossistema Agnóstico · Academia Digital</span>
+    </footer>
+  </section>
+
+  <!-- ==================== SLIDE 7 ==================== -->
+  <section class="slide" data-slide="7">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">7 · Resultados, Indicadores (KPIs) &amp; Acompanhamento</span>
+          <span class="slide-num-pill">Slide 07 / 08</span>
+        </div>
+        <h1 class="slide-title">Painel Executivo de Valor: 7 KPIs para Medir Maturidade, Adoção e Retorno</h1>
+        <p class="slide-takeaway">Rito mensal no Comitê Brain e revisão trimestral com os executivos de negócio: foco em valor capturado, não em volume de projetos abertos.</p>
+      </header>
+
+      <div class="slide-body">
+        <div class="grid-3">
+          <div class="box">
+            <h3>📈 Lente 1 · Maturidade &amp; Escala</h3>
+            <div style="margin-top:0.6rem;">
+              <div class="kpi-number">+1,0 nível</div>
+              <p><strong>1. Evolução no Scorecard 4D:</strong> Salto médio auditado nas unidades participantes em 12 meses.</p>
+            </div>
+            <div style="margin-top:1rem;">
+              <div class="kpi-number">≥ 30%</div>
+              <p><strong>2. Índice de Replicabilidade:</strong> % de componentes/agentes reaproveitados em mais de uma empresa do grupo.</p>
+            </div>
+          </div>
+
+          <div class="box box-primary">
+            <h3>👥 Lente 2 · Funil &amp; Adoção</h3>
+            <div style="margin-top:0.6rem;">
+              <div class="kpi-number">≥ 60%</div>
+              <p><strong>3. Qualidade do Funil:</strong> Taxa de conversão de Discoveries em Business Cases aprovados com ROI.</p>
+            </div>
+            <div style="margin-top:0.8rem;">
+              <div class="kpi-number">≥ 75%</div>
+              <p><strong>4. Adoção Ativa (MAU/WAU):</strong> % de usuários-alvo utilizando a solução 60 dias após o Go-Live.</p>
+            </div>
+            <div style="margin-top:0.8rem;">
+              <div class="kpi-number">≥ 80%</div>
+              <p><strong>5. Digital Upskilling:</strong> Cobertura de letramento nas lideranças e Champions mapeados.</p>
+            </div>
+          </div>
+
+          <div class="box box-emerald">
+            <h3>💰 Lente 3 · Valor ao Negócio</h3>
+            <div style="margin-top:0.6rem;">
+              <div class="kpi-number green">ROI &gt; 2,5x</div>
+              <p><strong>6. Save &amp; Margem Capturada:</strong> Retorno financeiro anualizado (redução de parada, refugo ou custo administrativo) validado pela área.</p>
+            </div>
+            <div style="margin-top:1rem;">
+              <div class="kpi-number green">-35% a -50%</div>
+              <p><strong>7. Eficiência de Ciclo (SLA):</strong> Redução do lead time nos processos transformados (crédito, CSC, manutenção).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (2,5 min):</strong> "Como provamos ao final de 12 meses que o Programa Brain gerou vantagem competitiva real? Através de 7 KPIs divididos em três lentes. Na lente de Maturidade, medimos a evolução de pelo menos 1 ponto no Scorecard 4D e uma taxa mínima de 30% de reuso de soluções entre empresas. Na lente de Funil e Adoção, medimos a conversão de Discovery em Business Case, a cobertura de Upskilling e, crucialmente, uma taxa de adoção ativa acima de 75% após 60 dias de operação assistida. E na lente de Valor de Negócio, medimos a redução de tempo de ciclo nos processos e o Save financeiro auditado junto à controladoria de cada unidade."
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Governança de Resultados</span>
+      <span>Cadência: Monitoramento Mensal · Revisão Executiva Trimestral</span>
+    </footer>
+  </section>
+
+  <!-- ==================== SLIDE 8 ==================== -->
+  <section class="slide" data-slide="8">
+    <div>
+      <header class="slide-header">
+        <div class="slide-top-meta">
+          <span class="slide-kicker">8 · Riscos, Contramedidas &amp; Decisões da Liderança</span>
+          <span class="slide-num-pill">Slide 08 / 08</span>
+        </div>
+        <h1 class="slide-title">Gestão de Riscos &amp; Os 3 Acordos Executivos para Destravar o Plano</h1>
+        <p class="slide-takeaway">Antecipação das fricções reais de uma organização industrial diversificada e decisões necessárias nos primeiros 30 dias.</p>
+      </header>
+
+      <div class="slide-body">
+        <table class="exec-table">
+          <thead>
+            <tr>
+              <th>Risco Mapeado</th>
+              <th>Impacto se Ignorado</th>
+              <th>Contramedida Prática no Plano</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>1. Conservadorismo cultural nos processos</strong></td>
+              <td>Rejeição silenciosa na ponta ("a ferramenta não funciona no meu setor").</td>
+              <td>Entrada via <strong>Operação Assistida (Human-in-the-Loop)</strong>, co-design com operadores e patrocínio de Champions locais.</td>
+            </tr>
+            <tr>
+              <td><strong>2. Qualidade/acesso a dados em SAP e legados</strong></td>
+              <td>Atraso em MVPs e modelos com baixa confiabilidade.</td>
+              <td><strong>Gate de Prontidão de Dados</strong> obrigatório antes do Business Case; criação de camada de conectores reutilizáveis.</td>
+            </tr>
+            <tr>
+              <td><strong>3. Iniciativas em silos (reinvenção da roda)</strong></td>
+              <td>Custo duplicado entre subsidiárias para resolver a mesma dor.</td>
+              <td>Triagem centralizada no Funil Brain e cláusula de <strong>arquitetura replicável</strong> desde o enquadramento.</td>
+            </tr>
+            <tr>
+              <td><strong>4. "Pilotos órfãos" pós-entrega técnica</strong></td>
+              <td>Projeto entregue pela equipe técnica mas sem captura de ROI real.</td>
+              <td>Exigência de um <strong>Business Owner</strong> da unidade no Business Case + 60 dias de acompanhamento pós-Go Live.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="box box-amber" style="padding: 1.1rem 1.4rem;">
+          <h3>🤝 3 Decisões que Precisam do Patrocínio da Liderança nos Primeiros 30 Dias</h3>
+          <p><strong>1. Mandato da Régua Única:</strong> Oficializar o Scorecard Brain 4D como baseline padrão nas unidades-alvo.<br>
+          <strong>2. Co-responsabilidade de Negócio:</strong> Nenhum projeto entra em execução sem um <em>Business Owner</em> da empresa comprometido com a meta de ROI/adoção.<br>
+          <strong>3. Alocação da Rede de Champions:</strong> Liberação formal de ~10% da agenda de pontos focais estratégicos nas unidades para a frente de Digital Engagement.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="speaker-note">
+      <strong>🎙️ Fala (2,0 min):</strong> "Para concluir, todo plano realista precisa encarar os riscos de frente. Mapeamos quatro riscos críticos: o conservadorismo natural em processos — que mitigamos com operação assistida Human-in-the-Loop; a fricção de dados em sistemas legados como o SAP — que filtramos com um Gate de Prontidão antes de aprovar o projeto; o risco de silos entre empresas — resolvido pelo desenho replicável no Comitê Brain; e o risco de pilotos órfãos — resolvido ao amarrar um dono de negócio em cada Business Case. Para dar a largada no Q1, peço três apoios da liderança nos primeiros 30 dias: oficializar a régua 4D, exigir co-responsabilidade de ROI do negócio e nomear os Brain Champions nas unidades. Muito obrigado, Leandro — fico à disposição para tuas perguntas!"
+    </div>
+
+    <footer class="slide-footer">
+      <span>Programa Brain · Gestão de Riscos &amp; Alinhamento Executivo</span>
+      <span>Apresentação Executiva · Jefferson Motta</span>
+    </footer>
+  </section>
+
+</main>
+
+<script>
+  let current = 1;
+  const total = 8;
+
+  function updateView() {
+    document.querySelectorAll('.slide').forEach(s => {
+      s.classList.toggle('active', Number(s.dataset.slide) === current);
+    });
+    document.getElementById('slideCounter').textContent = `${current} / ${total}`;
+  }
+
+  function nextSlide() {
+    if (document.body.classList.contains('all-slides-mode')) return;
+    if (current < total) { current++; updateView(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  }
+
+  function prevSlide() {
+    if (document.body.classList.contains('all-slides-mode')) return;
+    if (current > 1) { current--; updateView(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  }
+
+  function toggleNotes() {
+    document.body.classList.toggle('show-notes');
+    document.getElementById('notesBtn').classList.toggle('active');
+  }
+
+  function toggleAllSlides() {
+    document.body.classList.toggle('all-slides-mode');
+    document.getElementById('viewAllBtn').classList.toggle('active');
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') nextSlide();
+    if (e.key === 'ArrowLeft' || e.key === 'PageUp') prevSlide();
+  });
+</script>
+
+</body>
+</html>
