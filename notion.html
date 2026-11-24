@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Dossiê Mobile (Estilo Notion) — Programa Brain & Case 8 Slides</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --surface: #f7f7f5;
+      --ink: #191919;
+      --muted: #55534e;
+      --line: #e9e9e7;
+      --blue-bg: #eef6fc;
+      --blue-border: #cde5f7;
+      --blue-ink: #0b6e99;
+      --green-bg: #edf6f1;
+      --green-border: #c6e6d4;
+      --green-ink: #0f7b6c;
+      --amber-bg: #fbf3db;
+      --amber-border: #f3dfab;
+      --amber-ink: #9a6700;
+      --red-ink: #c4322b;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --mono: 'JetBrains Mono', monospace;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font);
+      font-size: 17px;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 5rem;
+    }
+
+    /* Sticky Mobile Index Bar */
+    .top-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+      padding: 0.65rem 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      overflow-x: auto;
+      white-space: nowrap;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .top-nav::-webkit-scrollbar { display: none; }
+
+    .nav-pill {
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 0.4rem 0.75rem;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+
+    .nav-pill:active, .nav-pill:hover {
+      background: var(--blue-bg);
+      color: var(--blue-ink);
+      border-color: var(--blue-border);
+    }
+
+    .copy-notion-btn {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #fff;
+      background: #191919;
+      border: none;
+      padding: 0.42rem 0.85rem;
+      border-radius: 8px;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 1.5rem 1.15rem;
+    }
+
+    /* Notion Cover & Header */
+    .page-icon {
+      font-size: 2.6rem;
+      line-height: 1;
+      margin-bottom: 0.6rem;
+    }
+
+    h1 {
+      font-size: 1.85rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.22;
+      margin-bottom: 0.75rem;
+    }
+
+    .meta-bar {
+      font-size: 0.9rem;
+      color: var(--muted);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 0.85rem 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    h2 {
+      font-size: 1.38rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      margin: 2.5rem 0 0.85rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 1px solid var(--line);
+      line-height: 1.3;
+    }
+
+    h3 {
+      font-size: 1.12rem;
+      font-weight: 700;
+      margin: 1.5rem 0 0.55rem;
+      color: var(--ink);
+      line-height: 1.35;
+    }
+
+    p {
+      margin-bottom: 0.95rem;
+      color: var(--ink);
+    }
+
+    ul, ol {
+      padding-left: 1.35rem;
+      margin-bottom: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    li {
+      color: var(--ink);
+    }
+
+    /* Notion Callouts */
+    .callout {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.1rem 1.15rem;
+      margin: 1rem 0 1.3rem;
+    }
+
+    .callout.blue {
+      background: var(--blue-bg);
+      border-color: var(--blue-border);
+    }
+
+    .callout.green {
+      background: var(--green-bg);
+      border-color: var(--green-border);
+    }
+
+    .callout.amber {
+      background: var(--amber-bg);
+      border-color: var(--amber-border);
+    }
+
+    .callout-title {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.45rem;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+    }
+
+    /* Comparison Cards (Shift Mental) */
+    .shift-card {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1.1rem;
+      margin-bottom: 1rem;
+      background: #fff;
+    }
+
+    .shift-topic {
+      font-weight: 700;
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+      color: var(--ink);
+    }
+
+    .shift-bad {
+      background: #fef2f2;
+      border-left: 3px solid var(--red-ink);
+      padding: 0.65rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.94rem;
+      color: #7f1d1d;
+      margin-bottom: 0.55rem;
+    }
+
+    .shift-good {
+      background: var(--green-bg);
+      border-left: 3px solid var(--green-ink);
+      padding: 0.65rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      color: #064e3b;
+      font-weight: 500;
+    }
+
+    /* Slide Blocks for Mobile Reading */
+    .slide-block {
+      border: 1px solid #d4d4d0;
+      border-radius: 14px;
+      padding: 1.25rem 1.15rem;
+      margin-bottom: 1.5rem;
+      background: #fff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    }
+
+    .slide-badge {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 600;
+      background: var(--blue-bg);
+      color: var(--blue-ink);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+    }
+
+    .slide-block h3 {
+      margin-top: 0.2rem;
+      font-size: 1.2rem;
+    }
+
+    .speech-box {
+      background: #191919;
+      color: #f1f5f9;
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .speech-box strong {
+      color: #7dd3fc;
+      display: block;
+      margin-bottom: 0.35rem;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a class="nav-pill" href="#bibliografia">📚 1. Base Brain</a>
+  <a class="nav-pill" href="#shift">🧠 2. Shift Mental</a>
+  <a class="nav-pill" href="#decisoes">⚖️ 3. Decisões</a>
+  <a class="nav-pill" href="#slides">📊 4. Os 8 Slides + Fala</a>
+  <button class="copy-notion-btn" id="copyBtn" onclick="copyForNotion()">📋 Copiar p/ Notion</button>
+</nav>
+
+<main class="page" id="notionContent">
+
+  <div class="page-icon">🧠</div>
+  <h1>Imersão Programa BRAIN, Shift Estratégico &amp; Case 8 Slides</h1>
+
+  <div class="meta-bar">
+    <div><strong>📅 Apresentação Presencial:</strong> Quarta, 02/12/2026 às 09:00h</div>
+    <div><strong>📍 Local:</strong> IHR — UCS Teatro, Bloco M, 3º andar (Caxias do Sul)</div>
+    <div><strong>👤 Avaliador:</strong> Leandro Andreatta Barros (Diretor de Governança e Tecnologias Digitais)</div>
+    <div><strong>⏱️ Formato:</strong> Até 8 slides executivos (20 min exposição + 20 min perguntas)</div>
+  </div>
+
+  <!-- ==================== PARTE 1 ==================== -->
+  <section id="bibliografia">
+    <h2>📚 1. A "Base Bibliográfica" do Case (Engenharia Reversa)</h2>
+
+    <p>No final do documento que o RH enviou, aparecem estas <strong>5 referências internas</strong>:</p>
+    <ol>
+      <li><code>Programa Brain 2º Ciclo rev01</code></li>
+      <li><code>Programa Brain - Randoncorp Roadmap de Letramento rev01</code></li>
+      <li><code>Tech Summit - IA no Mundo e o Programa Brain</code></li>
+      <li><code>Programa Brain - Digital Upskilling 2026</code></li>
+      <li><code>Programa Brain - Resumo Executivo status 02_OUT_26</code></li>
+    </ol>
+
+    <div class="callout amber">
+      <div class="callout-title">💡 Bastidor Importante: De onde vieram esses 5 títulos?</div>
+      <p style="margin-bottom:0;">Esses 5 arquivos são <strong>apresentações internas confidenciais da diretoria do Leandro</strong> (veja a data <code>status 02_OUT_26</code> e <code>rev01</code>). Eles não estão na internet pública: o próprio Leandro (ou a equipe dele) jogou esses 5 PPTs no <strong>Microsoft Copilot</strong> para gerar o enunciado do Case e esqueceu o rodapé de fontes que a IA listou. Cruzando a <strong>transcrição da tua entrevista de 19/11</strong> + o <strong>texto do Case</strong> + <strong>matérias públicas (Forbes, DB, ClicRBS, Randoncorp)</strong>, temos o conteúdo exato de cada um deles abaixo.</p>
+    </div>
+
+    <h3>Doc 1 &amp; 5: <code>Programa Brain 2º Ciclo rev01</code> + <code>Resumo Executivo 02_OUT_26</code></h3>
+    <ul>
+      <li><strong>Fase Pré-Brain (até ~2024):</strong> Experimentação aberta e tímida (<em>"deixa as pessoas testarem"</em>). Gerava iniciativas dispersas, risco de dados e custos sem governança.</li>
+      <li><strong>1º Ciclo do Brain (2024 – Out/2026):</strong> Criação do <strong>Comitê Brain</strong>, instituição de governança e segurança, escolha da <strong>Stack Microsoft (Copilot)</strong> como padrão corporativo e 1º funil de projetos focado em <strong>operações industriais</strong>.</li>
+      <li><strong>2º Ciclo de Maturidade (Out/2026 – 2027 · O Momento Atual):</strong>
+        <ul>
+          <li><strong>Frente Industrial (Continuidade e Escala):</strong> Qualidade preditiva, <strong>Plataforma de Inteligência de Manutenção</strong> (nascendo na <strong>Castertech</strong> como arquitetura-mãe replicável para Suspensys, Fras-le, Jost, Master e Implementos) e suporte a operações (<strong>PCP</strong> e inteligência de qual fábrica deve produzir o quê).</li>
+          <li><strong>Frente Corporativa &amp; Serviços (A Grande Expansão):</strong> Embarque das áreas corporativas e financeiras na governança do Brain — <strong>Rands / Banco Randon (esteira de crédito)</strong>, <strong>CSC</strong>, <strong>Jurídico</strong>, <strong>Financeiro</strong> e <strong>RH</strong>, com foco em <strong>agentificação sobre SAP e sistemas legados</strong>.</li>
+        </ul>
+      </li>
+    </ul>
+
+    <h3>Doc 2 &amp; 4: <code>Roadmap de Letramento rev01</code> + <code>Digital Upskilling 2026</code></h3>
+    <ul>
+      <li><strong>O Pilar de Digital Engagement:</strong> Opera junto à <strong>Academia Digital Randoncorp</strong>.</li>
+      <li><strong>Filosofia Oficial da Liderança (CTIO César Ferreira &amp; Leandro):</strong> <em>"A IA não substitui o fator humano; ela é uma camada de apoio que potencializa quem já conhece profundamente o processo do negócio."</em></li>
+      <li><strong>Letramento em 3 Camadas:</strong>
+        <ol>
+          <li><strong>Executiva (C-Level / Diretores / Gerentes):</strong> Visão estratégica, onde IA move o ponteiro do negócio, governança e patrocínio.</li>
+          <li><strong>Tática / Multiplicadores (Key Users / Champions):</strong> Domínio prático de ferramentas homologadas (Copilot, agentes sobre SAP), redesenho de processos e levantamento de oportunidades.</li>
+          <li><strong>Operacional (Chão de Fábrica e Backoffice):</strong> Gestão da mudança, perda do medo da ferramenta, micro-learning embutido nos ritos diários e operação assistida.</li>
+        </ol>
+      </li>
+    </ul>
+
+    <h3>Doc 3: <code>Tech Summit - IA no Mundo e o Programa Brain</code></h3>
+    <ul>
+      <li><strong>Movimento Tecnológico:</strong> Evolução de chatbots isolados para <strong>Agentic AI</strong> (agentes que executam tarefas em ERPs/SAP) e <strong>Physical AI</strong> (IA aplicada à indústria física: sensores, manutenção, visão computacional e autônomos como o AT4T).</li>
+      <li><strong>Modelo de Execução Agnóstico:</strong> O Programa Brain não tenta programar tudo dentro de casa. O Estrategista fecha o Business Case e o programa aloca o melhor executor: <strong>recursos próprios (TI / DB / IHR)</strong>, <strong>startups (via Randon Ventures)</strong> ou <strong>parceiros de mercado</strong>.</li>
+    </ul>
+  </section>
+
+  <!-- ==================== PARTE 2 ==================== -->
+  <section id="shift">
+    <h2>🧠 2. O Seu "Shift Mental": Da Ponta Operacional para Estrategista</h2>
+
+    <div class="callout blue">
+      <div class="callout-title">🎯 A Fronteira Exata da Sua Cadeira (O Que o Leandro Disse)</div>
+      <p style="margin-bottom:0;">Você <strong>não é o desenvolvedor do MVP</strong>. Na entrevista, o Leandro deixou claro: <em>"A entrega final do estrategista nesse pilar é o Business Case construído junto com o negócio; aí depois entra para a galera da execução, é uma outra pessoa aqui do grupo que coordena a execução."</em> Você atua <strong>antes</strong> (Diagnóstico, Discovery e Business Case) e <strong>depois</strong> (Operação Assistida, Digital Engagement e medição do ROI).</p>
+    </div>
+
+    <div class="shift-card">
+      <div class="shift-topic">1. Quando perguntarem: "Como você resolve um gargalo na Rands ou no CSC?"</div>
+      <div class="shift-bad">❌ <strong>Vício Operacional (Evitar):</strong> "Eu mapeio o fluxo, abro o n8n, conecto uma API no banco de dados e crio um agente em 3 dias para eles testarem."</div>
+      <div class="shift-good">✅ <strong>Postura Estrategista Digital:</strong> "Eu conduzo o Discovery com a liderança e a operação para medir o custo do gargalo, valido a prontidão do dado no SAP/legado, fecho o Business Case com meta de SLA/Save e defino no Comitê Brain o melhor veículo de execução (interno, IHR ou parceiro)."</div>
+    </div>
+
+    <div class="shift-card">
+      <div class="shift-topic">2. Quando falar sobre Prototipagem Rápida</div>
+      <div class="shift-bad">❌ <strong>Vício Operacional (Evitar):</strong> "Com Antigravity e Supabase eu mesmo coloco o sistema para rodar de um dia para o outro."</div>
+      <div class="shift-good">✅ <strong>Postura Estrategista Digital:</strong> "Uso prototipagem tangível como <strong>ferramenta de Discovery</strong>: materializar uma visão rápida na mesa do executivo alinha expectativas e reduz o risco de escopo antes de comprometermos orçamento de engenharia no Business Case."</div>
+    </div>
+
+    <div class="shift-card">
+      <div class="shift-topic">3. Quando o dado no SAP / legado estiver ruim</div>
+      <div class="shift-bad">❌ <strong>Vício Operacional (Evitar):</strong> "Eu crio um script ou planilha auxiliar para limpar os dados na unha."</div>
+      <div class="shift-good">✅ <strong>Postura Estrategista Digital:</strong> "Trato prontidão de dados como <strong>Gate Eliminatório de Priorização</strong>. Se a área não tem dado confiável, ela não recebe um projeto de IA agora — ela entra primeiro em uma ação estruturante de dados e processos, protegendo a credibilidade do Programa Brain."</div>
+    </div>
+
+    <div class="shift-card">
+      <div class="shift-topic">4. Quando falar sobre Adoção pelas Pessoas</div>
+      <div class="shift-bad">❌ <strong>Vício Operacional (Evitar):</strong> "Eu sento do lado do operador e ensino ele a usar a tela."</div>
+      <div class="shift-good">✅ <strong>Postura Estrategista Digital:</strong> "Atuo na arquitetura de <strong>Digital Engagement</strong>: amarro um Business Owner na diretoria, formo Multiplicadores locais (Brain Champions), insiro micro-learning nos ritos existentes e acompanho a taxa de adoção ativa nos 60 dias de Operação Assistida."</div>
+    </div>
+  </section>
+
+  <!-- ==================== PARTE 3 ==================== -->
+  <section id="decisoes">
+    <h2>⚖️ 3. As 4 Decisões Estratégicas do Plano (Para Você Avaliar)</h2>
+
+    <p>Na rubrica do Case, <strong>40% da nota</strong> vem de <em>Pensamento Estratégico (20%)</em> + <em>Priorização e Qualidade das Escolhas (20%)</em>. Um plano estratégico forte faz <strong>escolhas explícitas</strong>:</p>
+
+    <div class="callout green">
+      <div class="callout-title">Decisão 1 · Clusterização em 3 Perfis (Não tratar todas as empresas igual)</div>
+      <p style="margin-bottom:0;">No Diagnóstico (primeiros 45 dias), aplicamos o <strong>Scorecard Brain 4D</strong> (Tecnologia, Processos, Pessoas, Governança) e classificamos cada empresa/área em 3 Clusters:<br>
+      • <strong>Cluster A — Fundação:</strong> Dados dispersos ou processos manuais → foco em <em>padronizar processo + Digital Upskilling</em> (zero IA complexa aqui no início).<br>
+      • <strong>Cluster B — Aceleração Corporativa (Rands, CSC, Jurídico, RH):</strong> Processos transacionais sobre ERP/SAP → foco em <em>Quick Wins de agentificação e Copilot (30–90 dias)</em>.<br>
+      • <strong>Cluster C — Escala Industrial (Castertech, Suspensys, Fras-le):</strong> Massa de dados operacionais → foco em <em>Plataformas Preditivas (Manutenção, Qualidade e PCP)</em>.</p>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-title">Decisão 2 · Regra de Alocação de Portfólio 50 / 30 / 20</div>
+      <p style="margin-bottom:0;">• <strong>50% Quick Wins (30–90 dias):</strong> Geração rápida de save e confiança política (esteira de crédito Rands, triagem CSC/Jurídico, Copilot).<br>
+      • <strong>30% Capacidades Estruturantes:</strong> Conectores reutilizáveis SAP/legado, governança de dados e trilhas da Academia Digital.<br>
+      • <strong>20% Projetos Estratégicos Industriais (6–12 meses):</strong> Plataforma de Inteligência de Manutenção iniciando na <strong>Castertech</strong> como arquitetura-mãe replicável + PCP inteligente.</p>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-title">Decisão 3 · Esteira de 6 Etapas (Stage-Gate do Brain)</div>
+      <p style="margin-bottom:0;">Toda iniciativa percorre: <strong>1. Diagnóstico (4D) → 2. Discovery → 3. Enquadramento (Business Case) → 4. MVP (Execução Agnóstica) → 5. Operação Assistida (60 dias) → 6. Escala Inter-empresas</strong>.</p>
+    </div>
+
+    <div class="callout green">
+      <div class="callout-title">Decisão 4 · Inovação Incremental Assistida (Human-in-the-Loop)</div>
+      <p style="margin-bottom:0;">Respeitando a cultura tradicional em processos da Randoncorp (<em>"o ótimo não pode ser inimigo do bom"</em>), nenhuma IA entra tomando decisão caixa-preta no dia 1. Ela entra como <strong>recomendação assistida ao especialista</strong> e evolui para automação conforme a confiança é comprovada.</p>
+    </div>
+  </section>
+
+  <!-- ==================== PARTE 4 ==================== -->
+  <section id="slides">
+    <h2>📊 4. Os 8 Slides Executivos + Roteiro Falado (20 Minutos)</h2>
+    <p>Abaixo está o conteúdo integral de cada um dos 8 slides seguido da sua <strong>fala cronometrada (~2,5 min por slide)</strong>:</p>
+
+    <!-- SLIDE 1 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 01 / 08 · CENÁRIO &amp; HIPÓTESES</span>
+      <h3>O 2º Ciclo do Programa Brain: Da Governança Inicial para a Escala Coordenada</h3>
+      <ul>
+        <li><strong>Ponto de Partida:</strong> 1º Ciclo consolidou governança, Comitê Brain, stack Microsoft Copilot e tração industrial inicial.</li>
+        <li><strong>Missão do 2º Ciclo:</strong> Escalar soluções industriais (Manutenção, Qualidade, PCP) e <strong>embarcar áreas corporativas e serviços</strong> (Rands, CSC, Jurídico, RH, Financeiro).</li>
+        <li><strong>4 Hipóteses do Plano:</strong>
+          <ol>
+            <li><em>Processo precede Tecnologia:</em> agentificar fluxo ruim sobre o SAP só acelera o erro.</li>
+            <li><em>Assimetria exige Clusterização:</em> unidades em estágios diferentes pedem prescrições diferentes.</li>
+            <li><em>Evolução Incremental:</em> em cultura tradicional em processos, começa-se com operação assistida (<em>Human-in-the-Loop</em>).</li>
+            <li><em>Execução Agnóstica com Filtro Forte:</em> Estrategista garante Business Case sólido; melhor parceiro (interno, IHR ou startup) executa.</li>
+          </ol>
+        </li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (00:00 – 02:30)</strong>
+        "Leandro, minha leitura central é que o 1º Ciclo do Brain cumpriu o papel crucial de organizar a casa: colocou governança, stack padrão com Copilot e primeiros projetos fabris. No 2º Ciclo, o desafio muda: precisamos escalar os ganhos na indústria e, ao mesmo tempo, embarcar o mundo corporativo e financeiro (Rands, CSC, Jurídico, RH). Para isso, parto de 4 hipóteses práticas: processo vem antes do código; unidades diferentes pedem abordagens por cluster; em uma cultura tradicional em processos, o ótimo não pode ser inimigo do bom; e o papel do Estrategista é garantir que só entre para execução técnica o que tem Business Case sólido e dono de negócio engajado."
+      </div>
+    </article>
+
+    <!-- SLIDE 2 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 02 / 08 · DIAGNÓSTICO &amp; BASELINE</span>
+      <h3>Scorecard Brain 4D: Uma Régua Única para Negócios Distintos</h3>
+      <ul>
+        <li><strong>Como funciona (Primeiros 45 dias):</strong> Assessment executivo avaliando cada unidade de Nível 1 (Ad-hoc) a Nível 4 (Escalado) nas 4 dimensões:
+          <ul>
+            <li><strong>Tecnologia &amp; Dados:</strong> Qualidade das bases, APIs/SAP/MES e aderência à stack.</li>
+            <li><strong>Processos:</strong> Estabilidade do fluxo, mapeamento (Blueprint) e clareza do gargalo.</li>
+            <li><strong>Pessoas:</strong> Letramento digital, presença de Key Users e patrocínio executivo.</li>
+            <li><strong>Governança:</strong> Indicador de negócio auditável e conformidade LGPD/segurança.</li>
+          </ul>
+        </li>
+        <li><strong>Classificação em 3 Clusters:</strong>
+          <ul>
+            <li>🌱 <strong>Cluster A (Fundação):</strong> Dados dispersos → foco em processo e Upskilling.</li>
+            <li>⚡ <strong>Cluster B (Aceleração Corporativa — Rands, CSC, Jurídico, RH):</strong> Alta carga transacional em ERP → foco em Quick Wins de agentificação e Copilot.</li>
+            <li>🏭 <strong>Cluster C (Escala Industrial — Castertech, Suspensys, Fras-le):</strong> Dados operacionais maduros → foco em plataformas preditivas.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (02:30 – 05:00)</strong>
+        "Como comparar uma operação fabril como a Castertech com uma operação financeira como a Rands ou o CSC? Nos primeiros 45 dias, aplicamos o Scorecard Brain 4D. Não é um diagnóstico acadêmico longo: avaliamos dados, estabilidade do processo, prontidão das pessoas e métricas atuais. Com essa nota de 1 a 4, classificamos cada área em 3 clusters: Cluster Fundação (onde primeiro arrumamos processo e letramento), Cluster Aceleração Corporativa (ideal para agentificação rápida sobre SAP e esteira de crédito) e Cluster Escala Industrial (pronto para plataformas preditivas)."
+      </div>
+    </article>
+
+    <!-- SLIDE 3 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 03 / 08 · AMBIÇÃO 12 MESES</span>
+      <h3>A Transformação em 12 Meses: De Iniciativas Pontuais a Capacidades Permanentes</h3>
+      <ul>
+        <li><strong>Meta Global:</strong> Elevar a maturidade média das unidades-alvo em <strong>+1,0 nível no Scorecard 4D</strong>.</li>
+        <li><strong>Salto nas 4 Dimensões (De → Para):</strong>
+          <ul>
+            <li><strong>Tecnologia:</strong> De integrações caso a caso → Para catálogo de conectores e agentes homologados sobre SAP/legados.</li>
+            <li><strong>Processos:</strong> De automações isoladas → Para esteiras críticas (Manutenção, PCP, Crédito Rands e CSC) com recomendação assistida por IA.</li>
+            <li><strong>Pessoas:</strong> De uso individual por curiosos → Para rede ativa de <strong>Brain Champions</strong> + lideranças formadas na Academia Digital (<em>Upskilling 2026</em>).</li>
+            <li><strong>Governança:</strong> De pedidos reativos → Para portfólio 100% regido por Business Cases auditados e ≥30% de reuso entre empresas.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (05:00 – 07:30)</strong>
+        "Qual é a nossa ambição concreta para daqui a 12 meses? Não é apenas entregar projetos avulsos, mas deixar capacidades permanentes instaladas nas 4 dimensões. Em tecnologia, criar conectores reutilizáveis com SAP e sistemas legados; em processos, ter tanto o chão de fábrica quanto áreas corporativas operando com agentes assistidos; em pessoas, descentralizar a cultura através dos Brain Champions e da Academia Digital; e em governança, garantir que soluções criadas para uma empresa do grupo sejam replicadas para as demais com custo marginal menor."
+      </div>
+    </article>
+
+    <!-- SLIDE 4 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 04 / 08 · PRIORIZAÇÃO &amp; PORTFÓLIO</span>
+      <h3>Escolhas Claras: Matriz de Priorização &amp; Regra de Portfólio 50 / 30 / 20</h3>
+      <ul>
+        <li><strong>Filtro Eliminatório (2 Eixos):</strong> <em>Valor de Negócio (50%)</em> [Save, SLA, risco, replicabilidade] × <em>Prontidão de Execução (50%)</em> [dado no legado, integração, sponsor].</li>
+        <li><strong>Distribuição do Portfólio (50 / 30 / 20):</strong>
+          <ul>
+            <li>⚡ <strong>50% Quick Wins (30–90 dias):</strong> Esteira de propostas de crédito na <strong>Rands</strong>; triagem documental e atendimento no <strong>CSC / Jurídico / RH</strong>; produtividade com <strong>Microsoft Copilot</strong>.</li>
+            <li>🧱 <strong>30% Capacidades Estruturantes:</strong> Camada padrão de conectores SAP/legados, governança de bases operacionais e trilhas <em>Digital Upskilling 2026</em>.</li>
+            <li>🏭 <strong>20% Projetos Estratégicos (6–12 meses):</strong> <strong>Plataforma de Inteligência de Manutenção</strong> iniciando na <strong>Castertech</strong> como arquitetura-mãe para as demais fábricas + inteligência de <strong>PCP e Qualidade Preditiva</strong>.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (07:30 – 10:30)</strong>
+        "Um bom plano estratégico se define pelo que ele escolhe priorizar e pelo que ele recusa. Toda demanda passa por dois eixos: Valor de Negócio e Prontidão de Execução. Se não há dado confiável ou dono do negócio, não entra como projeto de IA — entra primeiro como preparação. Para o portfólio de 12 meses, aplicamos a regra 50/30/20: 50% do esforço em Quick Wins de 30 a 90 dias nas áreas corporativas e Rands para gerar resultado rápido; 30% em capacidades estruturantes de dados, conectores SAP e letramento; e 20% nos projetos industriais transformacionais, como a Plataforma de Inteligência de Manutenção começando pela Castertech já desenhada para escalar nas outras unidades."
+      </div>
+    </article>
+
+    <!-- SLIDE 5 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 05 / 08 · ROADMAP TRIMESTRAL</span>
+      <h3>Desdobramento Trimestral (Q1 a Q4): Da Linha de Base à Escala</h3>
+      <ul>
+        <li><strong>Lógica de Evolução:</strong> <em>Diagnóstico → Discovery → Enquadramento (Business Case) → MVP → Operação Assistida → Escala</em>.</li>
+        <li><strong>Q1 (Mês 1–3 · Baseline &amp; Ignição):</strong> Aplicação do Scorecard 4D, workshops de Discovery com executivos, aprovação dos primeiros Business Cases e início da Onda 1 de Quick Wins (Rands/CSC) + desenho do MVP Castertech.</li>
+        <li><strong>Q2 (Mês 4–6 · MVPs &amp; Operação Assistida):</strong> Go-Live da Onda 1 em Operação Assistida (60 dias medindo uso), MVP da Plataforma de Manutenção na Castertech em teste assistido e formação da 1ª turma de Brain Champions.</li>
+        <li><strong>Q3 (Mês 7–9 · Replicação Cruzada):</strong> Agentes validados no Q2 são replicados para novas unidades/áreas; evolução do Cluster Fundação para seus primeiros casos táticos; checkpoint semestral de ROI.</li>
+        <li><strong>Q4 (Mês 10–12 · Escala &amp; Auditoria):</strong> Roll-out da Plataforma de Manutenção para a 2ª planta industrial, Auditoria de Valor com controladoria/negócios e reaplicação do Scorecard 4D comprovando o salto anual.</li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (10:30 – 13:00)</strong>
+        "Neste roadmap trimestral, conectamos a visão estratégica ao ritmo real de entrega. No Q1 fechamos o baseline 4D, fazemos os Discoveries executivos e aprovamos a primeira safra de Business Cases. No Q2 colocamos os primeiros Quick Wins corporativos em Operação Assistida e rodamos o MVP da plataforma de manutenção na Castertech, em paralelo à formação dos Champions. No Q3 acontece o ganho de escala: pegamos os agentes que deram certo no Q2 e replicamos para outras áreas e unidades. E no Q4 auditamos o retorno financeiro acumulado, preparamos o roll-out industrial para a segunda planta e medimos o salto de maturidade no Scorecard 4D."
+      </div>
+    </article>
+
+    <!-- SLIDE 6 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 06 / 08 · GOVERNANÇA &amp; PESSOAS</span>
+      <h3>Orquestração de Ponta a Ponta: Governança, Execução Agnóstica &amp; Digital Engagement</h3>
+      <ul>
+        <li><strong>1. Governança &amp; Execução Agnóstica:</strong>
+          <ul>
+            <li>O Estrategista lidera do <em>Discovery</em> até o <strong>Business Case aprovado</strong> com dono de negócio definido.</li>
+            <li>Aprovado no Comitê Brain, roteamos para o melhor executor: <strong>TI/DB interna</strong> (M365/Copilot/SAP), <strong>IHR</strong> (algoritmos e P&amp;D avançado) ou <strong>Startups/Parceiros</strong> (Randon Ventures).</li>
+            <li>Pós-MVP, o Estrategista reassume nos <strong>60 dias de Operação Assistida</strong> para garantir adoção e ROI.</li>
+          </ul>
+        </li>
+        <li><strong>2. Digital Engagement &amp; Gestão da Mudança (Academia Digital):</strong>
+          <ul>
+            <li><em>Sponsors Executivos:</em> Comitês para destravar prioridades e cobrar adoção pelo exemplo.</li>
+            <li><em>Rede de Brain Champions:</em> Embaixadores locais em cada fábrica e área corporativa.</li>
+            <li><em>Micro-learning nos Ritos:</em> Trilhas de <em>Digital Upskilling 2026</em> inseridas nos ritos operacionais já existentes das equipes.</li>
+          </ul>
+        </li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (13:00 – 15:30)</strong>
+        "Como garantimos que essa engrenagem funcione sem criar silos? Através de dois motores coordenados pelo Estrategista. O primeiro é a Governança com Execução Agnóstica: meu papel é ir às unidades, tomar o cafezinho com a liderança e com a operação, fazer o Discovery e entregar o Business Case fechado. A partir daí, conectamos o melhor executor — seja TI/DB, pesquisadores do IHR ou startups parceiras — e eu volto na Operação Assistida para medir o valor. O segundo motor é o Digital Engagement: tecnologia sem gestão da mudança não gera ROI. Trabalhamos junto à Academia Digital em três camadas: patrocínio executivo, formação de Brain Champions dentro de cada negócio e micro-learning embutido nos ritos que já existem na rotina."
+      </div>
+    </article>
+
+    <!-- SLIDE 7 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 07 / 08 · RESULTADOS &amp; KPIs</span>
+      <h3>Painel Executivo de Valor: 7 KPIs de Maturidade, Adoção e Retorno</h3>
+      <ul>
+        <li><strong>Lente 1 · Maturidade &amp; Escala:</strong>
+          <ol>
+            <li><strong>+1,0 nível</strong> de evolução média no Scorecard Brain 4D em 12 meses.</li>
+            <li><strong>≥ 30% de Índice de Replicabilidade</strong> (soluções reaproveitadas em +1 empresa do grupo).</li>
+          </ol>
+        </li>
+        <li><strong>Lente 2 · Funil &amp; Adoção:</strong>
+          <ol start="3">
+            <li><strong>≥ 60% de Conversão do Funil</strong> (Discoveries que viram Business Cases aprovados com ROI).</li>
+            <li><strong>≥ 75% de Adoção Ativa</strong> (usuários-alvo utilizando a solução 60 dias após o Go-Live).</li>
+            <li><strong>≥ 80% de Cobertura Digital Upskilling</strong> nas lideranças e Champions mapeados.</li>
+          </ol>
+        </li>
+        <li><strong>Lente 3 · Valor de Negócio:</strong>
+          <ol start="6">
+            <li><strong>ROI &gt; 2,5x (Save &amp; Margem Capturada)</strong> anualizado e validado pela controladoria/negócio.</li>
+            <li><strong>-35% a -50% de Redução de Tempo de Ciclo (SLA)</strong> nos processos transformados.</li>
+          </ol>
+        </li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (15:30 – 18:00)</strong>
+        "Como provamos ao final de 12 meses que o Programa Brain gerou vantagem competitiva real? Através de 7 KPIs divididos em três lentes. Na lente de Maturidade, medimos a evolução de pelo menos 1 ponto no Scorecard 4D e uma taxa mínima de 30% de reuso de soluções entre empresas. Na lente de Funil e Adoção, medimos a conversão de Discovery em Business Case, a cobertura de Upskilling e, crucialmente, uma taxa de adoção ativa acima de 75% após 60 dias de operação assistida. E na lente de Valor de Negócio, medimos a redução de tempo de ciclo nos processos e o Save financeiro auditado junto à controladoria de cada unidade."
+      </div>
+    </article>
+
+    <!-- SLIDE 8 -->
+    <article class="slide-block">
+      <span class="slide-badge">SLIDE 08 / 08 · RISCOS &amp; DECISÕES</span>
+      <h3>Gestão de Riscos &amp; Os 3 Acordos Executivos para Destravar o Plano</h3>
+      <ul>
+        <li><strong>4 Riscos &amp; Contramedidas:</strong>
+          <ol>
+            <li><em>Conservadorismo cultural nos processos:</em> Entrada via Operação Assistida (<em>Human-in-the-Loop</em>) e co-design com operadores.</li>
+            <li><em>Qualidade/acesso a dados em SAP e legados:</em> Gate de Prontidão de Dados obrigatório antes do Business Case + conectores reutilizáveis.</li>
+            <li><em>Iniciativas em silos (reinvenção da roda):</em> Triagem centralizada no Comitê Brain com cláusula de arquitetura replicável.</li>
+            <li><em>"Pilotos órfãos" pós-entrega técnica:</em> Exigência de um <strong>Business Owner</strong> da unidade no Business Case + 60 dias de acompanhamento.</li>
+          </ol>
+        </li>
+        <li><strong>3 Decisões da Liderança nos Primeiros 30 Dias:</strong>
+          <ol>
+            <li><strong>Mandato da Régua Única:</strong> Oficializar o Scorecard Brain 4D como baseline padrão.</li>
+            <li><strong>Co-responsabilidade de Negócio:</strong> Nenhum projeto entra em execução sem um Business Owner comprometido com o ROI.</li>
+            <li><strong>Alocação dos Brain Champions:</strong> Liberação formal de ~10% da agenda de pontos focais nas unidades para Digital Engagement.</li>
+          </ol>
+        </li>
+      </ul>
+      <div class="speech-box">
+        <strong>🎙️ Como Falar (18:00 – 20:00)</strong>
+        "Para concluir, todo plano realista precisa encarar os riscos de frente. Mapeamos quatro riscos críticos: o conservadorismo natural em processos — que mitigamos com operação assistida Human-in-the-Loop; a fricção de dados em sistemas legados como o SAP — que filtramos com um Gate de Prontidão antes de aprovar o projeto; o risco de silos entre empresas — resolvido pelo desenho replicável no Comitê Brain; e o risco de pilotos órfãos — resolvido ao amarrar um dono de negócio em cada Business Case. Para dar a largada no Q1, peço três apoios da liderança nos primeiros 30 dias: oficializar a régua 4D, exigir co-responsabilidade de ROI do negócio e nomear os Brain Champions nas unidades. Muito obrigado, Leandro — fico à disposição para tuas perguntas!"
+      </div>
+    </article>
+  </section>
+
+</main>
+
+<script>
+  function copyForNotion() {
+    const text = document.getElementById('notionContent').innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.textContent = '✅ Copiado!';
+      setTimeout(() => { btn.textContent = '📋 Copiar p/ Notion'; }, 2500);
+    });
+  }
+</script>
+
+</body>
+</html>
